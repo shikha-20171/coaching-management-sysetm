@@ -1,9 +1,14 @@
 {
   "name": "coaching-management-app",
   "private": true,
+  "workspaces": [
+    "frontend"
+  ],
   "scripts": {
+    "postinstall": "npm --prefix frontend install",
+    "frontend:install": "npm --prefix frontend install",
     "backend": "npm --prefix backend start",
     "frontend": "npm --prefix frontend run dev",
-    "build": "npm --prefix frontend run build"
+    "build": "npm run frontend:install && npm --prefix frontend run build"
   }
 }
