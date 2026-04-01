@@ -44,13 +44,19 @@ app.get("/", (req, res) => {
   res.send("Coaching Management Backend Running");
 });
 
-const PORT = process.env.PORT || 5000;
+const isVercelRuntime = process.env.VERCEL === "1" || process.env.VERCEL === "true";
 
-const server = app.listen(PORT, () => {
-  console.log(`Server running on ${PORT}`);
-});
+if (!isVercelRuntime) {
+  const PORT = process.env.PORT || 5000;
 
-server.on("error", (error) => {
-  console.error("Failed to start backend server:", error.message);
-  process.exit(1);
-});
+  const server = app.listen(PORT, () => {
+    console.log(`Server running on ${PORT}`);
+  });
+
+  server.on("error", (error) => {
+    console.error("Failed to start backend server:", error.message);
+    process.exit(1);
+  });
+}
+
+export default app;
