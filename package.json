@@ -1,6 +1,7 @@
 {
   "name": "coaching-management-app",
   "private": true,
+  "type": "module",
   "workspaces": [
     "frontend"
   ],
