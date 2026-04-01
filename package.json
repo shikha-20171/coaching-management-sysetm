@@ -1,0 +1,9 @@
+{
+  "name": "coaching-management-app",
+  "private": true,
+  "scripts": {
+    "backend": "npm --prefix backend start",
+    "frontend": "npm --prefix frontend run dev",
+    "build": "npm --prefix frontend run build"
+  }
+}

@@ -1,0 +1,397 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "neha",
+      "email": "neha12@gmail.com",
+      "password": "$2b$10$KzaFlghvt8OOM5BiIdw0wuElXkqF6CKiyQPdAJJql/qcehFjFLDE2",
+      "role": "admin"
+    },
+    {
+      "id": 2,
+      "name": "neha",
+      "email": "neha13@gmail.com",
+      "password": "$2b$10$5ny8ZSv9psTOMpX/idRKAO8Kixyeef4dAb.pTujoMAMi/F8E.J.0W",
+      "role": "student"
+    },
+    {
+      "id": 3,
+      "name": "neha",
+      "email": "neha14@gmail.com",
+      "password": "$2b$10$lpA6nHMB0xRORrvCVaQgZOa7dJ0hpzG4osBZhDwr3pOqt78HZCBn6",
+      "role": "staff"
+    },
+    {
+      "id": 4,
+      "name": "shikha",
+      "email": "abc12@gmail.com",
+      "password": "$2b$10$/MUXpRkMZ396dX/KjUSkP.MncBUdEg6rOFJjv58YCZ1vg93GfjAj.",
+      "role": "student"
+    },
+    {
+      "id": 5,
+      "name": "shikha",
+      "email": "abc33@gmail.com",
+      "password": "$2b$10$U3RtaeH8h4nGs7b8LNyGQ.fLqICKBCNQJy2jrxFSj2H0VXbuELbEm",
+      "role": "staff"
+    },
+    {
+      "id": 6,
+      "name": "shikha",
+      "email": "abc13@gmail.com",
+      "password": "$2b$10$pZvHdmOmnG.tbjRswMDiw.gQGeY23wOXJhtB21J8oGSkTinf7yteK",
+      "role": "admin"
+    },
+    {
+      "id": 7,
+      "name": "shikha",
+      "email": "abc44@gmail.com",
+      "password": "$2b$10$wSyVK.CjRAdVAV9qBubviefuMORGaatw1svrTwaVtTM3OVe.4B/vu",
+      "role": "admin"
+    }
+  ],
+  "institutes": [
+    {
+      "id": 1,
+      "name": "EduPulse Kota",
+      "city": "Kota",
+      "manager": "Operations Team",
+      "contact": "9876500011",
+      "status": "Active"
+    },
+    {
+      "id": 2,
+      "name": "EduPulse Jaipur",
+      "city": "Jaipur",
+      "manager": "Branch Team",
+      "contact": "9876500012",
+      "status": "Growing"
+    }
+  ],
+  "students": [
+    {
+      "id": 1,
+      "user_id": null,
+      "name": "Aarav Sharma",
+      "email": "aarav.sample@student.com",
+      "phone": "9876543210",
+      "institute_id": 1,
+      "batch_id": 1,
+      "course_id": 1,
+      "guardian_name": "Rakesh Sharma",
+      "city": "Jaipur",
+      "attendance": 91,
+      "marks": 84,
+      "progress": 79,
+      "joined_on": "2026-01-12"
+    },
+    {
+      "id": 2,
+      "user_id": null,
+      "name": "Diya Patel",
+      "email": "diya.sample@student.com",
+      "phone": "9898989898",
+      "institute_id": 2,
+      "batch_id": 2,
+      "course_id": 2,
+      "guardian_name": "Krunal Patel",
+      "city": "Ahmedabad",
+      "attendance": 76,
+      "marks": 68,
+      "progress": 63,
+      "joined_on": "2026-02-08"
+    },
+    {
+      "id": 3,
+      "user_id": null,
+      "name": "Ishita Verma",
+      "email": "ishita.sample@student.com",
+      "phone": "9001200345",
+      "institute_id": 1,
+      "batch_id": 1,
+      "course_id": 1,
+      "guardian_name": "Amit Verma",
+      "city": "Delhi",
+      "attendance": 88,
+      "marks": 91,
+      "progress": 86,
+      "joined_on": "2026-01-28"
+    },
+    {
+      "id": 4,
+      "user_id": null,
+      "name": "Kabir Khan",
+      "email": "kabir.sample@student.com",
+      "phone": "9111122233",
+      "institute_id": 2,
+      "batch_id": 3,
+      "course_id": 3,
+      "guardian_name": "Asif Khan",
+      "city": "Lucknow",
+      "attendance": 69,
+      "marks": 52,
+      "progress": 49,
+      "joined_on": "2026-03-02"
+    },
+    {
+      "id": 5,
+      "user_id": 2,
+      "name": "neha",
+      "email": "neha13@gmail.com",
+      "phone": "",
+      "institute_id": 1,
+      "batch_id": 1,
+      "course_id": 1,
+      "guardian_name": "",
+      "city": "",
+      "attendance": 82,
+      "marks": 64,
+      "progress": 58,
+      "joined_on": "2026-03-31"
+    },
+    {
+      "id": 6,
+      "user_id": 4,
+      "name": "shikha",
+      "email": "abc12@gmail.com",
+      "phone": "",
+      "institute_id": 1,
+      "batch_id": 1,
+      "course_id": 1,
+      "guardian_name": "",
+      "city": "",
+      "attendance": 82,
+      "marks": 64,
+      "progress": 58,
+      "joined_on": "2026-03-31"
+    }
+  ],
+  "courses": [
+    {
+      "id": 1,
+      "title": "JEE Advanced Maths",
+      "fees": 25000,
+      "institute_id": 1,
+      "category": "Engineering",
+      "duration": "12 months",
+      "mentor": "Neha Mentor",
+      "mode": "Hybrid"
+    },
+    {
+      "id": 2,
+      "title": "NEET Physics Crash Course",
+      "fees": 18000,
+      "institute_id": 2,
+      "category": "Medical",
+      "duration": "4 months",
+      "mentor": "Rohan Sir",
+      "mode": "Offline"
+    },
+    {
+      "id": 3,
+      "title": "Foundation Science Program",
+      "fees": 14000,
+      "institute_id": 2,
+      "category": "School Prep",
+      "duration": "8 months",
+      "mentor": "Ananya Ma'am",
+      "mode": "Online"
+    }
+  ],
+  "batches": [
+    {
+      "id": 1,
+      "name": "Morning Achievers",
+      "course_id": 1,
+      "institute_id": 1,
+      "schedule": "Mon-Wed-Fri, 6:00 AM",
+      "room": "Omega Hall",
+      "capacity": 32,
+      "status": "Active"
+    },
+    {
+      "id": 2,
+      "name": "Evening Rankers",
+      "course_id": 2,
+      "institute_id": 2,
+      "schedule": "Tue-Thu-Sat, 5:30 PM",
+      "room": "Physics Lab",
+      "capacity": 26,
+      "status": "Active"
+    },
+    {
+      "id": 3,
+      "name": "Weekend Launchpad",
+      "course_id": 3,
+      "institute_id": 2,
+      "schedule": "Sat-Sun, 10:00 AM",
+      "room": "Digital Room",
+      "capacity": 40,
+      "status": "Filling Fast"
+    }
+  ],
+  "fees": [
+    {
+      "id": 1,
+      "student_id": 1,
+      "amount": 12000,
+      "status": "paid",
+      "due_date": "2026-04-10",
+      "paid_on": "2026-03-10",
+      "installment": "Quarter 1"
+    },
+    {
+      "id": 2,
+      "student_id": 2,
+      "amount": 18000,
+      "status": "pending",
+      "due_date": "2026-04-15",
+      "installment": "Crash Course"
+    },
+    {
+      "id": 3,
+      "student_id": 3,
+      "amount": 13000,
+      "status": "paid",
+      "due_date": "2026-04-20",
+      "paid_on": "2026-03-21",
+      "installment": "Quarter 1"
+    },
+    {
+      "id": 4,
+      "student_id": 4,
+      "amount": 9000,
+      "status": "pending",
+      "due_date": "2026-04-08",
+      "installment": "Month 1"
+    }
+  ],
+  "attendance": [
+    {
+      "id": 1,
+      "student_id": 1,
+      "date": "2026-03-24",
+      "status": "Present",
+      "subject": "Maths"
+    },
+    {
+      "id": 2,
+      "student_id": 1,
+      "date": "2026-03-26",
+      "status": "Present",
+      "subject": "Physics"
+    },
+    {
+      "id": 3,
+      "student_id": 2,
+      "date": "2026-03-26",
+      "status": "Absent",
+      "subject": "Physics"
+    },
+    {
+      "id": 4,
+      "student_id": 4,
+      "date": "2026-03-28",
+      "status": "Late",
+      "subject": "Science"
+    },
+    {
+      "id": 5,
+      "student_id": 1,
+      "date": "2026-03-29",
+      "status": "Present",
+      "subject": "Maths"
+    }
+  ],
+  "tests": [
+    {
+      "id": 1,
+      "title": "JEE Calculus Mock 4",
+      "course_id": 1,
+      "date": "2026-04-05",
+      "max_marks": 100,
+      "average_score": 71,
+      "status": "Scheduled"
+    },
+    {
+      "id": 2,
+      "title": "NEET Mechanics Drill",
+      "course_id": 2,
+      "date": "2026-04-07",
+      "max_marks": 80,
+      "average_score": 59,
+      "status": "Scheduled"
+    },
+    {
+      "id": 3,
+      "title": "Foundation Weekly Quiz",
+      "course_id": 3,
+      "date": "2026-04-03",
+      "max_marks": 50,
+      "average_score": 33,
+      "status": "Live"
+    }
+  ],
+  "notifications": [
+    {
+      "id": 1,
+      "title": "Parent connect drive",
+      "message": "All counsellors should complete April parent follow-up by Friday evening.",
+      "audience": "staff",
+      "priority": "high",
+      "created_at": "2026-03-30T09:30:00.000Z"
+    },
+    {
+      "id": 2,
+      "title": "Mock test reminder",
+      "message": "JEE mock test starts on April 5. Revise calculus and coordinate geometry.",
+      "audience": "student",
+      "priority": "medium",
+      "created_at": "2026-03-30T13:30:00.000Z"
+    },
+    {
+      "id": 3,
+      "title": "System-wide update",
+      "message": "Fee dashboard and AI recommendations have been refreshed for all campuses.",
+      "audience": "all",
+      "priority": "low",
+      "created_at": "2026-03-31T07:00:00.000Z"
+    }
+  ],
+  "materials": [],
+  "auditLogs": [
+    {
+      "id": 3,
+      "actorId": 7,
+      "actorRole": "admin",
+      "actorName": "shikha",
+      "action": "create",
+      "entity": "user",
+      "entityId": 7,
+      "details": "Registered new admin account",
+      "created_at": "2026-03-31T17:30:29.530Z"
+    },
+    {
+      "id": 2,
+      "actorId": 6,
+      "actorRole": "admin",
+      "actorName": "shikha",
+      "action": "create",
+      "entity": "user",
+      "entityId": 6,
+      "details": "Registered new admin account",
+      "created_at": "2026-03-31T10:07:50.101Z"
+    },
+    {
+      "id": 1,
+      "actorId": 5,
+      "actorRole": "staff",
+      "actorName": "shikha",
+      "action": "create",
+      "entity": "user",
+      "entityId": 5,
+      "details": "Registered new staff account",
+      "created_at": "2026-03-31T10:01:25.032Z"
+    }
+  ]
+}
