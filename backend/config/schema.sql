@@ -1,4 +1,4 @@
-CREATE TABLE institutes (
+CREATE TABLE IF NOT EXISTS institutes (
   id INT PRIMARY KEY AUTO_INCREMENT,
   name VARCHAR(120) NOT NULL,
   city VARCHAR(80) NOT NULL,
@@ -7,7 +7,7 @@ CREATE TABLE institutes (
   status VARCHAR(40) DEFAULT 'Active'
 );
 
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
   id INT PRIMARY KEY AUTO_INCREMENT,
   name VARCHAR(120) NOT NULL,
   email VARCHAR(160) NOT NULL UNIQUE,
@@ -15,7 +15,7 @@ CREATE TABLE users (
   role ENUM('admin', 'staff', 'student') NOT NULL
 );
 
-CREATE TABLE courses (
+CREATE TABLE IF NOT EXISTS courses (
   id INT PRIMARY KEY AUTO_INCREMENT,
   institute_id INT,
   title VARCHAR(160) NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE courses (
   FOREIGN KEY (institute_id) REFERENCES institutes(id)
 );
 
-CREATE TABLE batches (
+CREATE TABLE IF NOT EXISTS batches (
   id INT PRIMARY KEY AUTO_INCREMENT,
   institute_id INT,
   course_id INT,
@@ -40,7 +40,7 @@ CREATE TABLE batches (
   FOREIGN KEY (course_id) REFERENCES courses(id)
 );
 
-CREATE TABLE students (
+CREATE TABLE IF NOT EXISTS students (
   id INT PRIMARY KEY AUTO_INCREMENT,
   user_id INT,
   institute_id INT,
@@ -61,7 +61,7 @@ CREATE TABLE students (
   FOREIGN KEY (course_id) REFERENCES courses(id)
 );
 
-CREATE TABLE fees (
+CREATE TABLE IF NOT EXISTS fees (
   id INT PRIMARY KEY AUTO_INCREMENT,
   student_id INT NOT NULL,
   amount DECIMAL(10,2) NOT NULL,
@@ -72,7 +72,7 @@ CREATE TABLE fees (
   FOREIGN KEY (student_id) REFERENCES students(id)
 );
 
-CREATE TABLE attendance (
+CREATE TABLE IF NOT EXISTS attendance (
   id INT PRIMARY KEY AUTO_INCREMENT,
   student_id INT NOT NULL,
   date DATE NOT NULL,
@@ -81,7 +81,7 @@ CREATE TABLE attendance (
   FOREIGN KEY (student_id) REFERENCES students(id)
 );
 
-CREATE TABLE tests (
+CREATE TABLE IF NOT EXISTS tests (
   id INT PRIMARY KEY AUTO_INCREMENT,
   course_id INT NOT NULL,
   title VARCHAR(160) NOT NULL,
@@ -92,11 +92,23 @@ CREATE TABLE tests (
   FOREIGN KEY (course_id) REFERENCES courses(id)
 );
 
-CREATE TABLE notifications (
+CREATE TABLE IF NOT EXISTS notifications (
   id INT PRIMARY KEY AUTO_INCREMENT,
   title VARCHAR(160) NOT NULL,
   message TEXT NOT NULL,
   audience VARCHAR(40) DEFAULT 'all',
   priority VARCHAR(40) DEFAULT 'medium',
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS audit_logs (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  actor_id INT NULL,
+  actor_role VARCHAR(40) DEFAULT 'system',
+  actor_name VARCHAR(120) DEFAULT 'System',
+  action VARCHAR(40) NOT NULL,
+  entity VARCHAR(80) NOT NULL,
+  entity_id INT NULL,
+  details TEXT,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );

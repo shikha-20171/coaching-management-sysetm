@@ -15,6 +15,7 @@ import reportRoutes from "./routes/report.routes.js";
 import studentRoutes from "./routes/student.routes.js";
 import testRoutes from "./routes/test.routes.js";
 import userRoutes from "./routes/user.routes.js";
+import { readStore } from "./lib/store.js";
 import { verifyToken } from "./middleware/auth.middleware.js";
 
 const app = express();
@@ -36,8 +37,23 @@ app.use("/api/dashboard", verifyToken, dashboardRoutes);
 app.use("/api/user", verifyToken, userRoutes);
 app.use("/api/reports", verifyToken, reportRoutes);
 
-app.get("/api/health", (req, res) => {
-  res.json({ status: "ok", date: new Date().toISOString() });
+app.get("/api/health", async (req, res) => {
+  try {
+    const store = await readStore();
+    res.json({
+      status: "ok",
+      date: new Date().toISOString(),
+      database: "connected",
+      users: store.users.length,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      date: new Date().toISOString(),
+      database: "disconnected",
+      message: error.message,
+    });
+  }
 });
 
 app.get("/", (req, res) => {
