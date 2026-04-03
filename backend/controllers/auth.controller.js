@@ -1,67 +1,131 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import "../config/loadEnv.js";
-import { createAuditEntry } from "../lib/audit.js";
-import { getNextId, readStore, writeStore } from "../lib/store.js";
+import { promiseDB } from "../config/db.js";
 
 const jwtSecret = process.env.JWT_SECRET || "development-secret-key";
+
+async function logAuthEvent(req, { eventType, user }) {
+  try {
+    await promiseDB.query(
+      `INSERT INTO auth_events
+        (event_type, user_id, user_name, email, role, ip_address, user_agent)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [
+        eventType,
+        user?.id || null,
+        user?.name || null,
+        user?.email || "",
+        user?.role || null,
+        req.ip || null,
+        req.get("user-agent") || null,
+      ]
+    );
+  } catch (error) {
+    console.error("Auth event log error:", error.message);
+  }
+}
+
+async function createAuditLog(connection, { actor, action, entity, entityId, details }) {
+  await connection.query(
+    `INSERT INTO audit_logs
+      (actor_id, actor_role, actor_name, action, entity, entity_id, details)
+     VALUES (?, ?, ?, ?, ?, ?, ?)`,
+    [
+      actor?.id || null,
+      actor?.role || "system",
+      actor?.name || "System",
+      action,
+      entity,
+      entityId ?? null,
+      details || "",
+    ]
+  );
+}
+
+async function getDefaultStudentRefs(connection) {
+  const [[institutes], [batches], [courses]] = await Promise.all([
+    connection.query("SELECT id FROM institutes ORDER BY id ASC LIMIT 1"),
+    connection.query("SELECT id FROM batches ORDER BY id ASC LIMIT 1"),
+    connection.query("SELECT id FROM courses ORDER BY id ASC LIMIT 1"),
+  ]);
+
+  return {
+    instituteId: institutes[0]?.id || null,
+    batchId: batches[0]?.id || null,
+    courseId: courses[0]?.id || null,
+  };
+}
 
 export const register = async (req, res) => {
   const { name, email, password, role } = req.body;
 
+  if (!name?.trim() || !email?.trim() || !password || !role?.trim()) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+
+  const normalizedName = name.trim();
+  const normalizedEmail = email.trim().toLowerCase();
+  const normalizedRole = role.trim().toLowerCase();
+
+  if (!["student", "staff", "admin"].includes(normalizedRole)) {
+    return res.status(400).json({ message: "Invalid role selected" });
+  }
+
+  const connection = await promiseDB.getConnection();
+
   try {
-    const normalizedEmail = email?.trim().toLowerCase();
-    const normalizedName = name?.trim();
-    const normalizedRole = role?.trim().toLowerCase();
+    await connection.beginTransaction();
 
-    if (!normalizedName || !normalizedEmail || !password || !normalizedRole) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
-
-    if (!["student", "staff", "admin"].includes(normalizedRole)) {
-      return res.status(400).json({ message: "Invalid role selected" });
-    }
-
-    const store = await readStore();
-    const existingUser = store.users.find(
-      (user) => user.email.toLowerCase() === normalizedEmail
+    const [existingUsers] = await connection.query(
+      "SELECT id FROM users WHERE LOWER(email) = ? LIMIT 1",
+      [normalizedEmail]
     );
 
-    if (existingUser) {
+    if (existingUsers.length) {
+      await connection.rollback();
       return res.status(409).json({ message: "Email already registered" });
     }
 
-    const hashed = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const [insertResult] = await connection.query(
+      "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)",
+      [normalizedName, normalizedEmail, hashedPassword, normalizedRole]
+    );
+
     const user = {
-      id: getNextId(store.users),
+      id: Number(insertResult.insertId),
       name: normalizedName,
       email: normalizedEmail,
-      password: hashed,
+      password: hashedPassword,
       role: normalizedRole,
     };
 
-    store.users.push(user);
-
     if (normalizedRole === "student") {
-      store.students.push({
-        id: getNextId(store.students),
-        user_id: user.id,
-        name: normalizedName,
-        email: normalizedEmail,
-        phone: "",
-        institute_id: store.institutes[0]?.id || null,
-        batch_id: store.batches[0]?.id || null,
-        course_id: store.courses[0]?.id || null,
-        guardian_name: "",
-        city: "",
-        attendance: 82,
-        marks: 64,
-        progress: 58,
-        joined_on: new Date().toISOString().slice(0, 10),
-      });
+      const defaults = await getDefaultStudentRefs(connection);
+      await connection.query(
+        `INSERT INTO students
+          (user_id, institute_id, batch_id, course_id, name, email, phone, guardian_name, city, attendance, marks, progress, joined_on)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          user.id,
+          defaults.instituteId,
+          defaults.batchId,
+          defaults.courseId,
+          normalizedName,
+          normalizedEmail,
+          "",
+          "",
+          "",
+          82,
+          64,
+          58,
+          new Date().toISOString().slice(0, 10),
+        ]
+      );
     }
 
-    createAuditEntry(store, {
+    await createAuditLog(connection, {
       actor: user,
       action: "create",
       entity: "user",
@@ -69,11 +133,19 @@ export const register = async (req, res) => {
       details: `Registered new ${normalizedRole} account`,
     });
 
-    await writeStore(store);
-    return res.status(201).json({ message: "User registered successfully" });
+    await connection.commit();
+    await logAuthEvent(req, { eventType: "register", user });
+
+    return res.status(201).json({
+      message: "User registered successfully",
+      user: { id: user.id, name: user.name, email: user.email, role: user.role },
+    });
   } catch (error) {
+    await connection.rollback();
     console.error("Registration error:", error);
     return res.status(500).json({ message: error.message || "Registration failed" });
+  } finally {
+    connection.release();
   }
 };
 
@@ -85,10 +157,12 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: "Email and password are required" });
     }
 
-    const store = await readStore();
-    const user = store.users.find(
-      (item) => item.email.toLowerCase() === email.trim().toLowerCase()
+    const [users] = await promiseDB.query(
+      "SELECT id, name, email, password, role FROM users WHERE LOWER(email) = ? LIMIT 1",
+      [email.trim().toLowerCase()]
     );
+
+    const user = users[0];
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -104,10 +178,52 @@ export const login = async (req, res) => {
       expiresIn: "7d",
     });
 
+    await logAuthEvent(req, { eventType: "login", user });
+
     const { password: _password, ...safeUser } = user;
     return res.json({ token, user: safeUser });
   } catch (error) {
     console.error("Login error:", error);
     return res.status(500).json({ message: error.message || "Login failed" });
+  }
+};
+
+export const getAuthEvents = async (_req, res) => {
+  try {
+    const [rows] = await promiseDB.query(
+      `SELECT id, event_type, user_id, user_name, email, role, ip_address, user_agent, created_at
+       FROM auth_events
+       ORDER BY created_at DESC, id DESC
+       LIMIT 50`
+    );
+
+    return res.json(rows);
+  } catch (error) {
+    console.error("Fetch auth events error:", error);
+    return res.status(500).json({ message: error.message || "Unable to fetch auth events" });
+  }
+};
+
+export const getAuthDemoData = async (_req, res) => {
+  try {
+    const [[users], [authEvents]] = await Promise.all([
+      promiseDB.query(
+        `SELECT id, name, email, password, role
+         FROM users
+         ORDER BY id DESC
+         LIMIT 10`
+      ),
+      promiseDB.query(
+        `SELECT id, event_type, user_id, user_name, email, role, ip_address, created_at
+         FROM auth_events
+         ORDER BY id DESC
+         LIMIT 20`
+      ),
+    ]);
+
+    return res.json({ users, authEvents });
+  } catch (error) {
+    console.error("Fetch auth demo data error:", error);
+    return res.status(500).json({ message: error.message || "Unable to fetch auth demo data" });
   }
 };

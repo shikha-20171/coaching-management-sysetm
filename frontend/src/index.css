@@ -1031,3 +1031,142 @@ button {
     padding: 18px;
   }
 }
+
+.auth-data-page {
+  min-height: 100vh;
+  padding: 32px 20px 56px;
+}
+
+.auth-data-shell {
+  width: min(1280px, 100%);
+  margin: 0 auto;
+  display: grid;
+  gap: 22px;
+}
+
+.auth-data-hero,
+.auth-data-panel {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  backdrop-filter: blur(18px);
+  box-shadow: var(--shadow);
+  border-radius: 24px;
+}
+
+.auth-data-hero {
+  padding: 28px;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.auth-data-title {
+  margin: 12px 0 10px;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  line-height: 1;
+}
+
+.auth-data-copy {
+  margin: 0;
+  max-width: 720px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.auth-data-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 160px;
+  padding: 0 18px;
+}
+
+.auth-data-panel {
+  padding: 22px;
+}
+
+.auth-data-panel__header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.auth-data-panel__header h2 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.auth-data-panel__header span,
+.auth-data-state {
+  color: var(--muted);
+}
+
+.auth-data-state {
+  padding: 18px 20px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.auth-data-state--error {
+  color: #ffd2cc;
+  border-color: rgba(255, 138, 128, 0.25);
+  background: rgba(255, 138, 128, 0.1);
+}
+
+.auth-data-tableWrap {
+  overflow-x: auto;
+}
+
+.auth-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 960px;
+}
+
+.auth-data-table th,
+.auth-data-table td {
+  padding: 14px 12px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.auth-data-table th {
+  color: #d7e8ff;
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.auth-data-table td {
+  color: var(--text);
+}
+
+.auth-data-code {
+  max-width: 320px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85rem;
+  word-break: break-all;
+  color: #b8ffe9;
+}
+
+@media (max-width: 720px) {
+  .auth-data-page {
+    padding: 18px 14px 32px;
+  }
+
+  .auth-data-hero,
+  .auth-data-panel {
+    padding: 18px;
+  }
+
+  .auth-data-hero,
+  .auth-data-panel__header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

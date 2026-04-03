@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "auth:init": "node scripts/init-auth-db.js",
+    "auth:show": "node scripts/show-auth-data.js",
     "dev": "nodemon server.js",
     "start": "node server.js"
   },

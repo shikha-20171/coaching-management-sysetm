@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import AuthData from "./pages/AuthData";
 
 import AdminDashboard from "./pages/AdminDashboard";
 import UserDashboard from "./pages/UserDashboard";
@@ -35,6 +36,7 @@ function AnimatedRoutes() {
           {/* PUBLIC ROUTES */}
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/auth-data" element={<AuthData />} />
 
           {/* ADMIN ROUTES */}
           <Route

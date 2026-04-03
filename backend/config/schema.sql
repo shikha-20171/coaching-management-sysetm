@@ -112,3 +112,16 @@ CREATE TABLE IF NOT EXISTS audit_logs (
   details TEXT,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS auth_events (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  event_type ENUM('register', 'login') NOT NULL,
+  user_id INT NULL,
+  user_name VARCHAR(120),
+  email VARCHAR(160) NOT NULL,
+  role VARCHAR(40),
+  ip_address VARCHAR(80),
+  user_agent TEXT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+);
